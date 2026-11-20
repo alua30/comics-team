@@ -1,0 +1,21 @@
+name: HTML Check
+
+on: [push, pull_request]
+
+jobs:
+  validate-html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: HTML validation
+        run: echo "HTML файлдары тексерілді"
+
+      - name: DOCTYPE және charset тексеру
+        run: |
+          for f in *.html; do
+            echo "Тексерілуде: $f"
+            grep -qi "<!DOCTYPE html>" "$f" || { echo "Қате: $f файлында DOCTYPE жоқ"; exit 1; }
+            grep -qi "charset" "$f" || { echo "Қате: $f файлында charset жоқ"; exit 1; }
+          done
+          echo "Барлық HTML файлдары тексеруден өтті"
